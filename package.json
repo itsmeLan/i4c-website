@@ -1,0 +1,20 @@
+{
+  "name": "i4c-main",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "dev:all": "concurrently -n WEB,API -c cyan,magenta \"npm run dev\" \"npm run dev:backend\"",
+    "build": "npm run build -w frontend",
+    "lint": "npm run lint -w frontend",
+    "preview": "npm run preview -w frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
