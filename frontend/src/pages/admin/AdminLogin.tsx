@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { apiFetch, setAdminToken } from "@/lib/api";
-
+import { Eye, EyeOff } from "lucide-react";
 export default function AdminLogin() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -64,23 +65,29 @@ export default function AdminLogin() {
               <label className="block text-sm font-medium mb-2" htmlFor="password">
                 Password
               </label>
-              <Input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-background/50"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="bg-background/50 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
             <Button type="submit" disabled={isSubmitting} className="btn-primary w-full">
               {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
           </form>
 
-          <p className="text-xs text-muted-foreground">
-            Tip: enable `ADMIN_BOOTSTRAP_ENABLED=true` in `backend/.env` to create the first admin user.
-          </p>
         </CardContent>
       </Card>
     </div>
