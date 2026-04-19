@@ -35,7 +35,9 @@ export async function apiFetch<T>(
     if (token) headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const res = await fetch(path, { ...options, headers });
+  const baseUrl = import.meta.env.VITE_API_URL || "";
+  const fullUrl = path.startsWith("http") ? path : `${baseUrl}${path}`;
+  const res = await fetch(fullUrl, { ...options, headers });
   const data = await parseJsonSafe(res);
   if (!res.ok) {
     let message = data?.error || `Request failed (${res.status})`;
