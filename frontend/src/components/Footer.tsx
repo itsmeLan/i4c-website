@@ -6,7 +6,7 @@ import { apiFetch } from "@/lib/api";
 const Footer = () => {
   const { data: settings } = useQuery({
     queryKey: ["settings"],
-    queryFn: () => apiFetch<{ok: true, data: any}>("/api/settings").then(res => res.data),
+    queryFn: () => apiFetch<{ ok: true, data: any }>("/api/settings").then(res => res.data),
   });
   const currentYear = new Date().getFullYear();
 
@@ -20,7 +20,7 @@ const Footer = () => {
 
   const services = [
     "Commercial Construction",
-    "Residential Development", 
+    "Residential Development",
     "Industrial Construction",
     "Infrastructure Projects",
     "Renovation Services",
@@ -46,7 +46,7 @@ const Footer = () => {
                 <span className="gradient-text">i4C</span> Construction<span className="text-primary">.</span>
               </a>
               <p className="text-muted-foreground mt-4 leading-relaxed">
-                Building tomorrow's Philippines with innovation, quality, and Filipino pride. 
+                Building tomorrow's Philippines with innovation, quality, and Filipino pride.
                 Your trusted partner in construction excellence.
               </p>
             </div>
@@ -58,7 +58,7 @@ const Footer = () => {
                 {[
                   { icon: Facebook, href: "#", label: "Facebook" },
                   { icon: Instagram, href: "#", label: "Instagram" },
-                
+
                 ].map((social, index) => (
                   <a
                     key={index}
@@ -116,14 +116,14 @@ const Footer = () => {
                   <p>{settings?.addressLine3 || "Cebu 6000, Philippines"}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary flex-shrink-0" />
                 <div className="text-muted-foreground">
                   <p>{settings?.phone || "+63 (2) 8123-4567"}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div className="text-muted-foreground">
@@ -150,7 +150,7 @@ const Footer = () => {
             <div className="text-muted-foreground text-sm">
               © {currentYear} i4C Construction. All rights reserved.
             </div>
-            
+
             <div className="flex space-x-6 text-sm">
               <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors">
                 Privacy Policy
@@ -163,7 +163,7 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-          
+
           <div className="mt-6 pt-6 border-t border-border text-center">
             <p className="text-sm text-muted-foreground">
               Licensed and bonded construction company • PCAB License AAA Category • ISO 9001:2015 Certified

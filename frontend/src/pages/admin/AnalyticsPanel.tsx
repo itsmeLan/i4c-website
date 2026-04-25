@@ -81,6 +81,7 @@ export default function AnalyticsPanel() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(30);
+  const [sortKey, setSortKey] = useState("newest");
 
   const demoAreaData = generateAreaChartData(days);
 
@@ -103,8 +104,18 @@ export default function AnalyticsPanel() {
       .finally(() => setLoading(false));
   }, [toast, days]);
 
+  const sortedInquiries = data?.latestInquiries ? [...data.latestInquiries].sort((a, b) => {
+    if (sortKey === "oldest") return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    if (sortKey === "name") return a.name.localeCompare(b.name);
+    if (sortKey === "status") {
+      if (a.status === b.status) return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return a.status === "new" ? -1 : 1;
+    }
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  }) : [];
+
   const handleDownload = () => {
-    if (!data?.latestInquiries?.length) {
+    if (!sortedInquiries.length) {
       toast({ title: "No data to download" });
       return;
     }
@@ -112,10 +123,10 @@ export default function AnalyticsPanel() {
     const csvContent =
       "data:text/csv;charset=utf-8," +
       headers.join(",") +
-      "\\n" +
-      data.latestInquiries
-        .map((inq) => `${inq.name},${inq.email},${inq.status},${new Date(inq.createdAt).toLocaleDateString()}`)
-        .join("\\n");
+      "\n" +
+      sortedInquiries
+        .map((inq) => `"${inq.name}","${inq.email}","${inq.status}","${new Date(inq.createdAt).toLocaleDateString()}"`)
+        .join("\n");
     
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -141,13 +152,20 @@ export default function AnalyticsPanel() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <button 
-            onClick={() => toast({ title: "Sorting applied" })}
-            className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            Sort By
-          </button>
+          <div className="relative group">
+            <select
+              value={sortKey}
+              onChange={(e) => setSortKey(e.target.value)}
+              className="appearance-none flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-card pl-10 pr-8 py-2 text-sm font-medium transition-colors hover:bg-muted focus:outline-none"
+            >
+              <option value="newest">Sort: Newest</option>
+              <option value="oldest">Sort: Oldest</option>
+              <option value="name">Sort: Name (A-Z)</option>
+              <option value="status">Sort: Status</option>
+            </select>
+            <SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 border-r-2 border-b-2 border-muted-foreground rotate-45" />
+          </div>
           
           <div className="relative group">
             <select
@@ -246,7 +264,7 @@ export default function AnalyticsPanel() {
         <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-sm font-bold tracking-wide">Top Output Regions</h2>
-            <span className="text-xs text-muted-foreground cursor-pointer hover:underline">Last 30 days v</span>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/60 px-2 py-1 rounded-md font-medium">Last {days} Days</span>
           </div>
           <div className="space-y-5">
             {countryData.map((c, i) => {
@@ -272,7 +290,7 @@ export default function AnalyticsPanel() {
         <div className="rounded-2xl border border-border bg-card p-6 shadow-sm lg:col-span-1">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-sm font-bold tracking-wide">Activity per week</h2>
-            <span className="text-xs text-muted-foreground cursor-pointer hover:underline">Last 7 days v</span>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/60 px-2 py-1 rounded-md font-medium">Last {days} Days</span>
           </div>
           <div className="flex h-full flex-col justify-between max-h-[220px]">
             {activityHeatmap.map((row) => (
@@ -312,13 +330,13 @@ export default function AnalyticsPanel() {
         <div className="rounded-2xl border border-border bg-card p-6 shadow-sm h-[320px] flex flex-col">
           <div className="mb-6 flex items-center justify-between">
              <h2 className="text-sm font-bold tracking-wide">Inquiry History</h2>
-             <span className="text-xs text-muted-foreground cursor-pointer hover:text-primary">•••</span>
+             <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/60 px-2 py-1 rounded-md font-medium">Last {days} Days</span>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-            {!data.latestInquiries?.length ? (
+            {!sortedInquiries.length ? (
               <p className="text-sm text-muted-foreground mt-10 text-center">No recent inquiries.</p>
             ) : (
-              data.latestInquiries.map((inq) => (
+              sortedInquiries.map((inq) => (
                 <div key={inq._id} className="flex items-center justify-between group">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-bold shadow-sm">
