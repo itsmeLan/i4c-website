@@ -311,7 +311,10 @@ const Contact = () => {
                       type="button"
                       variant="outline"
                       className="btn-secondary"
-                      onClick={() => window.open("tel:+639123456789")}
+                      onClick={() => {
+                        const phone = settings?.phone || "+639123456789";
+                        window.open(`tel:${phone.replace(/\s+/g, '')}`);
+                      }}
                     >
                       <Phone className="h-4 w-4 mr-2" />
                       Call Now
