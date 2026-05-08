@@ -151,9 +151,20 @@ const Contact = () => {
                       <div>
                         <h3 className="font-semibold mb-2">{info.title}</h3>
                         <div className="space-y-1">
-                          {info.details.map((detail, idx) => (
-                            <p key={idx} className="text-muted-foreground text-sm">{detail}</p>
-                          ))}
+                          {info.details.map((detail, idx) => {
+                            const isPhone = info.title === "Phone Numbers";
+                            return isPhone ? (
+                              <a 
+                                key={idx} 
+                                href={`tel:${detail.replace(/\D/g, '')}`} 
+                                className="block text-muted-foreground text-sm hover:text-primary transition-colors"
+                              >
+                                {detail}
+                              </a>
+                            ) : (
+                              <p key={idx} className="text-muted-foreground text-sm">{detail}</p>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>

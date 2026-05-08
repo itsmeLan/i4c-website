@@ -43,24 +43,26 @@ const Navigation = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? "bg-background/95 backdrop-blur-md shadow-lg" : "bg-transparent"
     }`}>
-      <div className="container-custom section-padding">
-        <div className="flex items-center justify-between h-16">
+      <div className="container-custom px-4 sm:px-6 lg:px-8">
+        <div className={`flex items-center justify-between transition-all duration-300 ${
+          isScrolled ? "h-14" : "h-16 md:h-20"
+        }`}>
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#home" className="text-2xl font-bold leading-none">
+            <a href="#home" className="text-xl lg:text-2xl font-bold leading-none">
               <span className="gradient-text">i4C</span> Construction
               <span className="text-primary">.</span>
             </a>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          {/* Desktop Navigation - Only show on large screens */}
+          <div className="hidden lg:block">
+            <div className="ml-10 flex items-baseline space-x-6">
               {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
+                  className="text-foreground hover:text-primary transition-colors duration-300 font-medium text-sm xl:text-base"
                 >
                   {item.name}
                 </button>
@@ -70,10 +72,13 @@ const Navigation = () => {
 
           {/* Contact Info & CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <a 
+              href={`tel:${(settings?.phone || "+639123456789").replace(/\s+/g, '')}`}
+              className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+            >
               <Phone className="h-4 w-4" />
               <span>{settings?.phone || "+63 912 345 6789"}</span>
-            </div>
+            </a>
             <Button 
               className="btn-primary"
               onClick={() => scrollToSection("#contact")}
@@ -82,8 +87,8 @@ const Navigation = () => {
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button - Show on everything below lg */}
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -95,10 +100,10 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Only show below lg */}
         {isOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg shadow-lg">
+          <div className="lg:hidden mt-4 pb-4">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg shadow-lg max-h-[70vh] overflow-y-auto">
               {navItems.map((item) => (
                 <button
                   key={item.name}
@@ -109,10 +114,13 @@ const Navigation = () => {
                 </button>
               ))}
               <div className="px-3 py-2 border-t border-border mt-4">
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-3">
+                <a 
+                  href={`tel:${(settings?.phone || "+639123456789").replace(/\s+/g, '')}`}
+                  className="flex items-center space-x-2 text-sm text-muted-foreground mb-3 hover:text-primary transition-colors"
+                >
                   <Phone className="h-4 w-4" />
                   <span>{settings?.phone || "+63 912 345 6789"}</span>
-                </div>
+                </a>
                 <Button 
                   className="btn-primary w-full"
                   onClick={() => scrollToSection("#contact")}

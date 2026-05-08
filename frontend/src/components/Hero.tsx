@@ -52,7 +52,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
       </div>
 
-      <div className="container-custom section-padding relative z-10">
+      <div className="container-custom section-padding relative z-10 landscape:py-12 lg:landscape:py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8 animate-slide-up">
@@ -62,13 +62,13 @@ const Hero = () => {
                 <span className="text-primary font-medium">Certified Excellence in Construction</span>
               </div>
               
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight landscape:text-3xl md:landscape:text-5xl lg:landscape:text-7xl">
                 Building
                 <span className="block gradient-text text-glow">Tomorrow's</span>
                 Philippines
               </h1>
               
-              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
+              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed landscape:text-lg md:landscape:text-xl">
                 Reliable construction solutions designed for growth, durability, and the future.
               </p>
             </div>
@@ -93,8 +93,8 @@ const Hero = () => {
               </Button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border">
+            {/* Stats - Hidden on small landscape mobile viewports, shown on desktop landscape */}
+            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border landscape:hidden lg:landscape:grid sm:grid">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center lg:text-left">
                   <div className="flex items-center justify-center lg:justify-start mb-2">

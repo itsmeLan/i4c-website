@@ -117,12 +117,15 @@ const Footer = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-primary flex-shrink-0" />
-                <div className="text-muted-foreground">
+              <a 
+                href={`tel:${(settings?.phone || "+639123456789").replace(/\D/g, '')}`}
+                className="flex items-center space-x-3 group"
+              >
+                <Phone className="h-5 w-5 text-primary flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <div className="text-muted-foreground group-hover:text-primary transition-colors">
                   <p>{settings?.phone || "+63 (2) 8123-4567"}</p>
                 </div>
-              </div>
+              </a>
 
               <div className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
