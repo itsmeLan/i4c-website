@@ -38,7 +38,7 @@ const Projects = () => {
       year: "2023",
       client: "ABC Corporation",
       description: "40-story mixed-use development featuring office spaces, retail outlets, and premium facilities.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000",
       status: "Completed"
     },
     {
@@ -49,7 +49,7 @@ const Projects = () => {
       year: "2023",
       client: "Sunshine Developers",
       description: "150-unit residential subdivision with modern Filipino architecture and sustainable features.",
-      image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80&w=1000",
       status: "Completed"
     },
     {
@@ -60,7 +60,7 @@ const Projects = () => {
       year: "2024",
       client: "Department of Public Works",
       description: "15-kilometer elevated highway extension improving traffic flow and connectivity.",
-      image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&q=80&w=1000",
       status: "In Progress"
     },
     {
