@@ -159,6 +159,7 @@ const Projects = () => {
           {displayedProjects.map((project, index) => (
             <div 
               key={project.id}
+              id={`project-card-${index}`}
               className="card-construction group overflow-hidden animate-slide-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >

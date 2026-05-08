@@ -21,13 +21,35 @@ const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background with overlay */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Construction site" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/50"></div>
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {/* Main background image with subtle floating effect */}
+        <div className="absolute inset-0 animate-float" style={{ animationDuration: '20s' }}>
+          <img 
+            src="/hero-sketch.png" 
+            alt="Architectural sketching" 
+            className="w-full h-full object-cover opacity-60 scale-110"
+          />
+        </div>
+        
+        {/* Animated Sketching Lines Overlay */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+          {/* Structural grid lines */}
+          <path d="M100,200 L900,200 M100,500 L900,500 M100,800 L900,800" stroke="hsl(var(--primary))" strokeWidth="1" fill="none" className="animate-draw-line" />
+          <path d="M200,100 L200,900 M500,100 L500,900 M800,100 L800,900" stroke="hsl(var(--primary))" strokeWidth="1" fill="none" className="animate-draw-line" style={{ animationDelay: '1s' }} />
+          
+          {/* Abstract building shapes */}
+          <path d="M300,700 L300,300 L700,300 L700,700 L300,700" stroke="hsl(var(--primary-glow))" strokeWidth="2" fill="none" className="animate-draw-line" style={{ animationDelay: '2s' }} />
+          <path d="M300,300 L500,150 L700,300" stroke="hsl(var(--primary-glow))" strokeWidth="2" fill="none" className="animate-draw-line" style={{ animationDelay: '3s' }} />
+          
+          {/* Circular highlights */}
+          <circle cx="500" cy="500" r="150" stroke="hsl(var(--primary))" strokeWidth="1" fill="none" className="animate-draw-line" style={{ animationDelay: '4s' }} />
+        </svg>
+
+        {/* Moving Neon Light Spots */}
+        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 bg-primary/10 blur-[150px] rounded-full animate-neon-move pointer-events-none"></div>
+        <div className="absolute top-1/4 left-1/3 w-[300px] h-[300px] bg-primary-glow/20 blur-[100px] rounded-full animate-neon-move pointer-events-none" style={{ animationDelay: '-7s' }}></div>
+
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
       </div>
 
       <div className="container-custom section-padding relative z-10">

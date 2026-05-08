@@ -92,6 +92,7 @@ const Services = () => {
           {services.map((service, index) => (
             <div 
               key={index} 
+              id={`service-card-${index}`}
               className="card-construction group hover:scale-105 transition-all duration-300"
             >
               <div className="mb-6">
