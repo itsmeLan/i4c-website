@@ -30,7 +30,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/50"></div>
       </div>
 
-      <div className="container-custom section-padding relative z-10">
+      <div className="container-custom px-4 sm:px-6 lg:px-8 py-12 sm:py-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8 animate-slide-up">
@@ -40,13 +40,13 @@ const Hero = () => {
                 <span className="text-primary font-medium">Certified Excellence in Construction</span>
               </div>
               
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight">
                 Building
                 <span className="block gradient-text text-glow">Tomorrow's</span>
                 Philippines
               </h1>
               
-              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
                 Reliable construction solutions designed for growth, durability, and the future.
               </p>
             </div>
@@ -71,15 +71,15 @@ const Hero = () => {
               </Button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border">
+            {/* Stats - Hidden on very small heights (landscape mobile) */}
+            <div className="hidden sm:grid grid-cols-3 gap-8 pt-8 border-t border-border">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center lg:text-left">
                   <div className="flex items-center justify-center lg:justify-start mb-2">
                     <stat.icon className="h-6 w-6 text-primary mr-2" />
                   </div>
-                  <div className="text-2xl lg:text-3xl font-bold gradient-text">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="text-xl lg:text-3xl font-bold gradient-text">{stat.value}</div>
+                  <div className="text-xs lg:text-sm text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
             </div>

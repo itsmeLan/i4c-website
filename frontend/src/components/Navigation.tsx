@@ -49,20 +49,20 @@ const Navigation = () => {
         }`}>
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#home" className="text-2xl font-bold leading-none">
+            <a href="#home" className="text-xl lg:text-2xl font-bold leading-none">
               <span className="gradient-text">i4C</span> Construction
               <span className="text-primary">.</span>
             </a>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          {/* Desktop Navigation - Only show on large screens */}
+          <div className="hidden lg:block">
+            <div className="ml-10 flex items-baseline space-x-6">
               {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
+                  className="text-foreground hover:text-primary transition-colors duration-300 font-medium text-sm xl:text-base"
                 >
                   {item.name}
                 </button>
@@ -87,8 +87,8 @@ const Navigation = () => {
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button - Show on everything below lg */}
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -100,10 +100,10 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Only show below lg */}
         {isOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg shadow-lg">
+          <div className="lg:hidden mt-4 pb-4">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg shadow-lg max-h-[70vh] overflow-y-auto">
               {navItems.map((item) => (
                 <button
                   key={item.name}
