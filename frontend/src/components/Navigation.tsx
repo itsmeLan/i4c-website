@@ -70,10 +70,13 @@ const Navigation = () => {
 
           {/* Contact Info & CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <a 
+              href={`tel:${(settings?.phone || "+639123456789").replace(/\s+/g, '')}`}
+              className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+            >
               <Phone className="h-4 w-4" />
               <span>{settings?.phone || "+63 912 345 6789"}</span>
-            </div>
+            </a>
             <Button 
               className="btn-primary"
               onClick={() => scrollToSection("#contact")}
@@ -109,10 +112,13 @@ const Navigation = () => {
                 </button>
               ))}
               <div className="px-3 py-2 border-t border-border mt-4">
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-3">
+                <a 
+                  href={`tel:${(settings?.phone || "+639123456789").replace(/\s+/g, '')}`}
+                  className="flex items-center space-x-2 text-sm text-muted-foreground mb-3 hover:text-primary transition-colors"
+                >
                   <Phone className="h-4 w-4" />
                   <span>{settings?.phone || "+63 912 345 6789"}</span>
-                </div>
+                </a>
                 <Button 
                   className="btn-primary w-full"
                   onClick={() => scrollToSection("#contact")}
