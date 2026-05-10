@@ -293,27 +293,40 @@ export default function AnalyticsReport() {
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
           @page {
-            margin: 0;
-            size: auto;
+            size: A4;
+            margin: 0mm;
           }
           body {
             background: white !important;
             margin: 0 !important;
             padding: 0 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           .report-document {
-            width: 100% !important;
-            max-width: none !important;
-            padding: 20mm !important;
+            width: 210mm !important;
+            min-height: 297mm !important;
+            padding: 15mm !important;
+            margin: 0 auto !important;
             box-shadow: none !important;
-            margin: 0 !important;
+            border: none !important;
+            display: block !important;
+            background: white !important;
           }
           .page-break-inside-avoid {
             page-break-inside: avoid;
+            break-inside: avoid;
           }
-          /* Hide standard browser headers/footers */
+          h1, h2, h3, p, span, td, th {
+            color: black !important;
+          }
+          .recharts-responsive-container {
+            width: 100% !important;
+            height: 250px !important;
+          }
+          /* Remove browser URL and date headers */
           header, footer {
-            -webkit-print-color-adjust: exact;
+            display: block !important;
           }
         }
       `}} />
