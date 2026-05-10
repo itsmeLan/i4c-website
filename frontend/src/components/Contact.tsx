@@ -152,6 +152,7 @@ const Contact = () => {
                         <h3 className="font-semibold mb-2">{info.title}</h3>
                         <div className="space-y-1">
                           {info.details.map((detail, idx) => {
+                            const isPhone = info.title === "Phone Numbers";
                             const isEmail = info.title === "Email Address";
                             if (isPhone) {
                               return (
