@@ -13,7 +13,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { Calendar as CalendarIcon, Download, SlidersHorizontal, ArrowUpRight, CheckCircle2, Circle } from "lucide-react";
+import { Calendar as CalendarIcon, Download, SlidersHorizontal, ArrowUpRight, CheckCircle2, Circle, FileText } from "lucide-react";
 
 type Inquiry = {
   _id: string;
@@ -28,53 +28,14 @@ type AnalyticsData = {
   pageViews: number;
   inquiries: number;
   conversionRate: number;
+  avgScrollDepth: number;
   latestInquiries?: Inquiry[];
   areaData?: { name: string; views: number }[];
   sourceData?: { name: string; value: number; color: string }[];
   countryData?: { name: string; value: number }[];
   activityHeatmap?: { time: string; data: { day: string; value: number }[] }[];
+  topPages?: { path: string; count: number }[];
 };
-
-// ── Mock Data Generators for Charts (Demo Mode) ── //
-const generateAreaChartData = (daysCount: number) => {
-  const data = [];
-  const start = new Date();
-  start.setDate(start.getDate() - daysCount);
-  for (let i = 0; i < daysCount; i++) {
-    const d = new Date(start);
-    d.setDate(d.getDate() + i);
-    data.push({
-      name: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      views: Math.floor(Math.random() * 500) + 100 + (Math.sin(i / 3) * 150),
-    });
-  }
-  return data;
-};
-
-const sourceData = [
-  { name: "Direct Search", value: 400, color: "#3b82f6" }, 
-  { name: "Social Media", value: 300, color: "#f59e0b" }, 
-  { name: "Search Engine", value: 200, color: "#10b981" }, 
-  { name: "Referral", value: 100, color: "#6366f1" }, 
-];
-
-const countryData = [
-  { name: "Philippines", value: 1200 },
-  { name: "United States", value: 450 },
-  { name: "Singapore", value: 320 },
-  { name: "Canada", value: 210 },
-  { name: "Australia", value: 150 },
-];
-
-const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const times = ["9am", "12pm", "3pm", "6pm"];
-const activityHeatmap = times.map((t) => ({
-  time: t,
-  data: weekDays.map((d) => ({
-    day: d,
-    value: Math.floor(Math.random() * 4), 
-  })),
-}));
 
 export default function AnalyticsPanel() {
   const { toast } = useToast();
@@ -82,8 +43,6 @@ export default function AnalyticsPanel() {
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(30);
   const [sortKey, setSortKey] = useState("newest");
-
-  const demoAreaData = generateAreaChartData(days);
 
   useEffect(() => {
     setLoading(true);
@@ -115,27 +74,45 @@ export default function AnalyticsPanel() {
   }) : [];
 
   const handleDownload = () => {
-    if (!sortedInquiries.length) {
-      toast({ title: "No data to download" });
-      return;
-    }
-    const headers = ["Name", "Email", "Status", "Date"];
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      headers.join(",") +
-      "\n" +
-      sortedInquiries
-        .map((inq) => `"${inq.name}","${inq.email}","${inq.status}","${new Date(inq.createdAt).toLocaleDateString()}"`)
-        .join("\n");
+    if (!data) return;
+
+    let csvContent = "data:text/csv;charset=utf-8,";
     
+    // ── 1. Summary Section ──
+    csvContent += "ANALYTICS SUMMARY\n";
+    csvContent += `Period,${data.period}\n`;
+    csvContent += `Total Page Views,${data.pageViews}\n`;
+    csvContent += `Total Inquiries,${data.inquiries}\n`;
+    csvContent += `Conversion Rate,${data.conversionRate}%\n`;
+    csvContent += `Average Scroll Depth,${data.avgScrollDepth}%\n\n`;
+
+    // ── 2. Top Pages Section ──
+    if (data.topPages?.length) {
+      csvContent += "TOP VISITED PAGES\n";
+      csvContent += "Path,Views\n";
+      data.topPages.forEach(p => {
+        csvContent += `"${p.path}",${p.count}\n`;
+      });
+      csvContent += "\n";
+    }
+
+    // ── 3. Inquiry History Section ──
+    if (sortedInquiries.length) {
+      csvContent += "INQUIRY HISTORY\n";
+      csvContent += "Name,Email,Status,Date\n";
+      sortedInquiries.forEach((inq) => {
+        csvContent += `"${inq.name}","${inq.email}","${inq.status}","${new Date(inq.createdAt).toLocaleDateString()}"\n`;
+      });
+    }
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `analytics_report_${days}days.csv`);
+    link.setAttribute("download", `full_analytics_report_${days}days.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast({ title: "Report downloaded!" });
+    toast({ title: "Comprehensive report downloaded!" });
   };
 
   if (loading) return <div className="p-8 text-muted-foreground">Loading dashboard...</div>;
@@ -200,7 +177,7 @@ export default function AnalyticsPanel() {
           </div>
           <div className="h-[280px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={demoAreaData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={data.areaData || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
@@ -227,14 +204,14 @@ export default function AnalyticsPanel() {
              <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={sourceData}
+                  data={data.sourceData || []}
                   innerRadius={60}
                   outerRadius={85}
                   paddingAngle={5}
                   dataKey="value"
                   stroke="none"
                 >
-                  {sourceData.map((entry, index) => (
+                  {(data.sourceData || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
@@ -251,7 +228,7 @@ export default function AnalyticsPanel() {
           </div>
           {/* Legend */}
           <div className="mt-4 grid grid-cols-2 gap-y-3">
-             {sourceData.map(s => (
+             {(data.sourceData || []).map(s => (
                <div key={s.name} className="flex items-center gap-2">
                  <div className="h-2 w-2 rounded-full" style={{ backgroundColor: s.color }} />
                  <span className="text-xs font-medium text-muted-foreground">{s.name}</span>
@@ -267,8 +244,8 @@ export default function AnalyticsPanel() {
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/60 px-2 py-1 rounded-md font-medium">Last {days} Days</span>
           </div>
           <div className="space-y-5">
-            {countryData.map((c, i) => {
-              const max = Math.max(...countryData.map(d => d.value));
+            {(data.countryData || []).map((c, i) => {
+              const max = Math.max(...(data.countryData || []).map(d => d.value));
               const percent = (c.value / max) * 100;
               return (
                 <div key={c.name} className="flex items-center gap-3">
@@ -293,7 +270,7 @@ export default function AnalyticsPanel() {
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/60 px-2 py-1 rounded-md font-medium">Last {days} Days</span>
           </div>
           <div className="flex h-full flex-col justify-between max-h-[220px]">
-            {activityHeatmap.map((row) => (
+            {(data.activityHeatmap || []).map((row) => (
               <div key={row.time} className="flex items-center gap-2">
                 <span className="w-8 text-[10px] text-muted-foreground">{row.time}</span>
                 <div className="flex flex-1 justify-between gap-1">
@@ -314,7 +291,7 @@ export default function AnalyticsPanel() {
             <div className="flex items-center gap-2 mt-2">
               <span className="w-8" />
               <div className="flex flex-1 justify-between">
-                {weekDays.map(d => <span key={d} className="text-[10px] text-muted-foreground w-full text-center">{d.charAt(0)}</span>)}
+                {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => <span key={i} className="text-[10px] text-muted-foreground w-full text-center">{d}</span>)}
               </div>
             </div>
             {/* Legend Line */}
@@ -361,13 +338,100 @@ export default function AnalyticsPanel() {
               ))
             )}
           </div>
-          <button 
-            onClick={handleDownload}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/5"
-          >
-            <Download className="h-3 w-3" />
-            DOWNLOAD REPORT
-          </button>
+          <div className="mt-4 flex flex-col gap-2">
+            <button 
+              onClick={handleDownload}
+              className="flex w-full items-center justify-center gap-2 rounded-lg py-2 text-xs font-bold text-muted-foreground transition-colors hover:bg-muted"
+            >
+              <Download className="h-3 w-3" />
+              DOWNLOAD CSV
+            </button>
+            <button 
+              onClick={() => window.open(`/admin/report?days=${days}`, '_blank')}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary/10 py-2.5 text-xs font-black text-primary transition-all hover:bg-primary hover:text-white shadow-sm"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              GENERATE PROFESSIONAL REPORT
+            </button>
+          </div>
+        </div>
+
+        {/* ── Top Visited Pages ── */}
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm flex flex-col lg:col-span-2">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-sm font-bold tracking-wide">Top Visited Pages</h2>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/60 px-2 py-1 rounded-md font-medium">Last {days} Days</span>
+          </div>
+          <div className="space-y-4">
+            {(!data.topPages || data.topPages.length === 0) ? (
+              <p className="text-sm text-muted-foreground py-10 text-center">No page view data recorded yet.</p>
+            ) : (
+              data.topPages.map((page, i) => {
+                const max = Math.max(...data.topPages!.map(p => p.count));
+                const percent = (page.count / max) * 100;
+                return (
+                  <div key={page.path} className="flex items-center gap-4 group">
+                    <span className="text-xs font-bold text-muted-foreground w-4">{i + 1}</span>
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium truncate max-w-[200px] sm:max-w-md group-hover:text-primary transition-colors">{page.path}</span>
+                        <span className="text-xs font-bold">{page.count.toLocaleString()} <span className="text-[10px] text-muted-foreground font-normal">views</span></span>
+                      </div>
+                      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                        <div 
+                          className="h-full rounded-full bg-primary transition-all duration-1000 ease-out" 
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* ── Engagement Overview ── */}
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm flex flex-col">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-sm font-bold tracking-wide">Engagement Metrics</h2>
+          </div>
+          <div className="flex flex-1 flex-col items-center justify-center space-y-6">
+            <div className="relative">
+              <svg className="h-32 w-32 rotate-[-90deg]">
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="58"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  className="text-muted"
+                />
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="58"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  strokeDasharray={364.4}
+                  strokeDashoffset={364.4 - (364.4 * (data.avgScrollDepth || 0)) / 100}
+                  strokeLinecap="round"
+                  className="text-primary transition-all duration-1000 ease-out"
+                />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold">{data.avgScrollDepth || 0}%</span>
+                <span className="text-[10px] text-muted-foreground uppercase font-medium">Scroll Depth</span>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                On average, visitors explore about <span className="font-bold text-foreground">{data.avgScrollDepth || 0}%</span> of your page content before leaving.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

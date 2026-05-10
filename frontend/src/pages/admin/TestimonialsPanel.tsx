@@ -33,6 +33,7 @@ type Testimonial = {
   imageUrl?: string;
   order?: number;
   isPublished?: boolean;
+  videoUrl?: string;
 };
 
 /* ── Star Rating Display ── */
@@ -102,6 +103,7 @@ export default function TestimonialsPanel({
   const [project, setProject] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isPublished, setIsPublished] = useState(true);
+  const [videoUrl, setVideoUrl] = useState("");
   const [imageMode, setImageMode] = useState<"url" | "file">("url");
   function resetForm() {
     setName("");
@@ -112,6 +114,7 @@ export default function TestimonialsPanel({
     setImageUrl("");
     setIsPublished(true);
     setImageMode("url");
+    setVideoUrl("");
     setEditingId(null);
   }
 
@@ -130,11 +133,12 @@ export default function TestimonialsPanel({
     setImageUrl(t.imageUrl || "");
     setImageMode(t.imageUrl?.startsWith("data:") ? "file" : "url");
     setIsPublished(t.isPublished ?? true);
+    setVideoUrl(t.videoUrl || "");
     setSheetOpen(true);
   }
 
   async function handleSubmit() {
-    const payload = { name, content, rating, company, project, imageUrl, isPublished, order: 0 };
+    const payload = { name, content, rating, company, project, imageUrl, isPublished, videoUrl, order: 0 };
     try {
       if (editingId) {
         await onUpdate(editingId, payload);
@@ -432,6 +436,18 @@ export default function TestimonialsPanel({
                   </button>
                 </div>
               )}
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Video URL (YouTube/Vimeo)</label>
+              <Input
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                className="bg-background/50"
+              />
+              <p className="text-[10px] text-muted-foreground">
+                Paste a link to a video testimonial if available.
+              </p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Rating</label>

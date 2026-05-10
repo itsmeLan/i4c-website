@@ -12,10 +12,22 @@ type ServiceItem = {
   title: string;
   description: string;
   features: string[];
+  videoUrl?: string;
 };
 
 const Services = () => {
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+
+  const trackServiceView = (service: ServiceItem) => {
+    apiFetch("/api/analytics/event", {
+      method: "POST",
+      body: JSON.stringify({
+        event: "service_view",
+        path: `/services/${service.title.toLowerCase().replace(/\s+/g, '-')}`,
+        meta: { title: service.title }
+      }),
+    }).catch(() => {});
+  };
 
   const fallbackServices: ServiceItem[] = [
     {
@@ -69,6 +81,7 @@ const Services = () => {
       title: s.title,
       description: s.description || "",
       features: Array.isArray(s.features) ? s.features : [],
+      videoUrl: s.videoUrl || "",
     }));
   }, [apiData]);
 
@@ -114,7 +127,10 @@ const Services = () => {
 
               <div className="mt-6 pt-6 border-t border-border">
                 <button
-                  onClick={() => setSelectedService(service)}
+                  onClick={() => {
+                    setSelectedService(service);
+                    trackServiceView(service);
+                  }}
                   className="text-primary font-semibold hover:text-primary-glow transition-colors group/btn"
                 >
                   Learn More 

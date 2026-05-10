@@ -7,6 +7,7 @@ const ServiceSchema = new mongoose.Schema(
     features: [{ type: String, trim: true }],
     icon: { type: String, default: "" },
     order: { type: Number, default: 0 },
+    videoUrl: { type: String, default: "", trim: true },
   },
   { timestamps: true },
 );

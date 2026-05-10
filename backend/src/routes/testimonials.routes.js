@@ -16,6 +16,7 @@ const testimonialUpsertSchema = z.object({
   imageUrl: z.string().url().optional().or(z.literal("")).default(""),
   order: z.number().int().optional().default(0),
   isPublished: z.boolean().optional().default(true),
+  videoUrl: z.string().max(500).optional().or(z.literal("")).default(""),
 });
 
 // Public: list published testimonials

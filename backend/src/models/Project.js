@@ -16,6 +16,7 @@ const ProjectSchema = new mongoose.Schema(
       },
     ],
     coverImageUrl: { type: String, default: "" },
+    videoUrl: { type: String, default: "", trim: true },
   },
   { timestamps: true },
 );

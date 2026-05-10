@@ -19,6 +19,7 @@ const projectUpsertSchema = z.object({
     .array(z.object({ url: z.string(), publicId: z.string().min(1) }))
     .optional()
     .default([]),
+  videoUrl: z.string().max(500).optional().or(z.literal("")).default(""),
 });
 
 // Public: list projects (supports optional category filter)

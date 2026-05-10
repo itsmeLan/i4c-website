@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AnalyticsReport from "./pages/admin/AnalyticsReport";
 import { RequireAdmin } from "./pages/admin/RequireAdmin";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -75,6 +76,14 @@ const App = () => (
             element={
               <RequireAdmin>
                 <AdminDashboard />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/report"
+            element={
+              <RequireAdmin>
+                <AnalyticsReport />
               </RequireAdmin>
             }
           />
