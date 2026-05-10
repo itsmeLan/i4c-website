@@ -152,16 +152,30 @@ const Contact = () => {
                         <h3 className="font-semibold mb-2">{info.title}</h3>
                         <div className="space-y-1">
                           {info.details.map((detail, idx) => {
-                            const isPhone = info.title === "Phone Numbers";
-                            return isPhone ? (
-                              <a 
-                                key={idx} 
-                                href={`tel:${detail.replace(/\D/g, '')}`} 
-                                className="block text-muted-foreground text-sm hover:text-primary transition-colors"
-                              >
-                                {detail}
-                              </a>
-                            ) : (
+                            const isEmail = info.title === "Email Address";
+                            if (isPhone) {
+                              return (
+                                <a 
+                                  key={idx} 
+                                  href={`tel:${detail.replace(/\s+/g, '')}`} 
+                                  className="block text-muted-foreground text-sm hover:text-primary transition-colors"
+                                >
+                                  {detail}
+                                </a>
+                              );
+                            }
+                            if (isEmail) {
+                              return (
+                                <a 
+                                  key={idx} 
+                                  href={`mailto:${detail}`} 
+                                  className="block text-muted-foreground text-sm hover:text-primary transition-colors"
+                                >
+                                  {detail}
+                                </a>
+                              );
+                            }
+                            return (
                               <p key={idx} className="text-muted-foreground text-sm">{detail}</p>
                             );
                           })}
@@ -318,18 +332,32 @@ const Contact = () => {
                         </>
                       )}
                     </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="btn-secondary"
-                      onClick={() => {
-                        const phone = settings?.phone || "+639123456789";
-                        window.open(`tel:${phone.replace(/\s+/g, '')}`);
-                      }}
-                    >
-                      <Phone className="h-4 w-4 mr-2" />
-                      Call Now
-                    </Button>
+                    <div className="flex flex-1 gap-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="btn-secondary flex-1"
+                        onClick={() => {
+                          const email = settings?.email || "info@i4cconstruction.ph";
+                          window.location.href = `mailto:${email}`;
+                        }}
+                      >
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Us
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="btn-secondary flex-1"
+                        onClick={() => {
+                          const phone = settings?.phone || "+639123456789";
+                          window.open(`tel:${phone.replace(/\s+/g, '')}`);
+                        }}
+                      >
+                        <Phone className="h-4 w-4 mr-2" />
+                        Call Now
+                      </Button>
+                    </div>
                   </div>
 
                   <p className="text-xs text-muted-foreground text-center">
