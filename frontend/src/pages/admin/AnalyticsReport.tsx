@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { apiFetch } from "../../lib/api";
 import {
   AreaChart,
   Area,
@@ -16,7 +16,7 @@ import {
   Bar,
 } from "recharts";
 import { Printer, ArrowLeft, Download, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 
 type AnalyticsData = {
   period: string;
@@ -44,10 +44,10 @@ export default function AnalyticsReport() {
     apiFetch<{ ok: true; stats: AnalyticsData }>(`/api/analytics/dashboard?days=${days}`, {
       auth: true,
     })
-      .then((res) => {
+      .then((res: { stats: AnalyticsData }) => {
         setData(res.stats);
       })
-      .catch((err) => console.error("Report Load Error:", err))
+      .catch((err: Error | any) => console.error("Report Load Error:", err))
       .finally(() => setLoading(false));
   }, [days]);
 
