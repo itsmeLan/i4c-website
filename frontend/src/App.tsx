@@ -21,7 +21,7 @@ function AnalyticsTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    const path = `${location.pathname}${location.search}`;
+    const path = `${location.pathname}${location.hash}`;
 
     if (typeof window !== "undefined" && (window as any).gtag) {
       (window as any).gtag("event", "page_view", { page_path: path });
@@ -56,7 +56,8 @@ function AnalyticsTracker() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.hash]);
+
 
   return null;
 }

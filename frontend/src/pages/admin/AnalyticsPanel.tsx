@@ -374,7 +374,22 @@ export default function AnalyticsPanel() {
                     <span className="text-xs font-bold text-muted-foreground w-4">{i + 1}</span>
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium truncate max-w-[200px] sm:max-w-md group-hover:text-primary transition-colors">{page.path}</span>
+                        <span className="text-sm font-medium truncate max-w-[200px] sm:max-w-md group-hover:text-primary transition-colors">
+                          {page.path === "/" ? "Home Page" : 
+                           page.path === "/#about" ? "Home: About Section" :
+                           page.path === "/#services" ? "Home: Services Section" :
+                           page.path === "/#projects" ? "Home: Projects Section" :
+                           page.path === "/#testimonials" ? "Home: Testimonials" :
+                           page.path === "/#contact" ? "Home: Contact Section" :
+                           page.path === "/#estimator" ? "Home: Cost Estimator" :
+                           page.path === "/admin" ? "Admin Dashboard" : 
+                           page.path === "/admin/login" ? "Admin Login" : 
+                           page.path === "/admin/report" ? "Analytics Report" :
+                           page.path === "/privacy-policy" ? "Privacy Policy" :
+                           page.path === "/terms-of-service" ? "Terms of Service" :
+                           page.path === "/cookie-policy" ? "Cookie Policy" :
+                           page.path.replace(/\//g, " ").replace(/#/g, ": ").trim().split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
+                        </span>
                         <span className="text-xs font-bold">{page.count.toLocaleString()} <span className="text-[10px] text-muted-foreground font-normal">views</span></span>
                       </div>
                       <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">

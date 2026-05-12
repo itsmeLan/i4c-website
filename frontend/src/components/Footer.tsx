@@ -127,12 +127,17 @@ const Footer = () => {
                 </div>
               </a>
 
-              <div className="flex items-start space-x-3">
-                <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                <div className="text-muted-foreground">
+              <a 
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${settings?.email || "info@i4cconstruction.ph"}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start space-x-3 group"
+              >
+                <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <div className="text-muted-foreground group-hover:text-primary transition-colors">
                   <p>{settings?.email || "info@i4cconstruction.ph"}</p>
                 </div>
-              </div>
+              </a>
             </div>
 
             {/* Business Hours */}

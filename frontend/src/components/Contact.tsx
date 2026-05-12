@@ -169,7 +169,9 @@ const Contact = () => {
                               return (
                                 <a 
                                   key={idx} 
-                                  href={`mailto:${detail}`} 
+                                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${detail}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="block text-muted-foreground text-sm hover:text-primary transition-colors"
                                 >
                                   {detail}
@@ -340,7 +342,7 @@ const Contact = () => {
                         className="btn-secondary flex-1"
                         onClick={() => {
                           const email = settings?.email || "info@i4cconstruction.ph";
-                          window.location.href = `mailto:${email}`;
+                          window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, "_blank");
                         }}
                       >
                         <Mail className="h-4 w-4 mr-2" />

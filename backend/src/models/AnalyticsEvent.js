@@ -6,14 +6,17 @@ const AnalyticsEventSchema = new mongoose.Schema(
     path: { type: String },
     meta: { type: mongoose.Schema.Types.Mixed },
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    // Safety mechanism: Capped collection limited to 200MB.
+    // This is a "set it and forget it" limit that ensures the collection never 
+    // grows beyond 200MB, automatically overwriting the oldest data.
+    capped: { size: 200 * 1024 * 1024 } 
+  }
 );
 
 // Standard index for chronological queries and counting
 AnalyticsEventSchema.index({ createdAt: -1 });
 
-// Safety mechanism: Automatically delete analytics events older than 90 days
-// This protects the database free tier from filling up indefinitely.
-AnalyticsEventSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 90 });
-
 export const AnalyticsEvent = mongoose.model("AnalyticsEvent", AnalyticsEventSchema);
+

@@ -118,8 +118,8 @@ export default function AnalyticsReport() {
         </header>
 
         {/* Executive Summary */}
-        <section className="mb-12">
-          <h2 className="mb-6 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
+        <section className="mb-8">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
             <div className="h-4 w-1 bg-primary" /> Executive Summary
           </h2>
           <div className="grid grid-cols-4 gap-6">
@@ -143,8 +143,8 @@ export default function AnalyticsReport() {
         </section>
 
         {/* Traffic Analysis */}
-        <section className="mb-12 page-break-inside-avoid">
-          <h2 className="mb-6 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
+        <section className="mb-8 page-break-inside-avoid">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
             <div className="h-4 w-1 bg-primary" /> Traffic Performance Trend
           </h2>
           <div className="h-[250px] w-full bg-slate-50/30 rounded-xl border border-slate-100 p-4">
@@ -167,41 +167,46 @@ export default function AnalyticsReport() {
         </section>
 
         {/* Audience Breakdown */}
-        <div className="grid grid-cols-2 gap-12 mb-12 page-break-inside-avoid">
-          <section>
-            <h2 className="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-900">
+        <div className="grid grid-cols-2 gap-8 mb-8 page-break-inside-avoid">
+          <section className="flex flex-col">
+            <h2 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-900">
               <div className="h-3 w-1 bg-primary" /> Traffic Source Distribution
             </h2>
-            <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={data.sourceData || []}
-                    innerRadius={50}
-                    outerRadius={70}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {(data.sourceData || []).map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="mt-4 flex flex-wrap justify-center gap-4">
+            <div className="w-full">
+              <div className="h-[180px] mb-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={data.sourceData || []}
+                      innerRadius={50}
+                      outerRadius={70}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {(data.sourceData || []).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-col items-center gap-2">
                 {(data.sourceData || []).map(s => (
-                  <div key={s.name} className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full" style={{ backgroundColor: s.color }} />
-                    <span className="text-[10px] font-bold text-slate-500 uppercase">{s.name}</span>
+                  <div key={s.name} className="flex items-center justify-between w-full max-w-[200px] border-b border-slate-100 pb-1">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: s.color }} />
+                      <span className="text-[10px] font-bold text-slate-700 uppercase">{s.name}</span>
+                    </div>
+                    <span className="text-xs font-black text-slate-900">{s.value}</span>
                   </div>
                 ))}
               </div>
             </div>
           </section>
 
-          <section>
-            <h2 className="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-900">
+          <section className="flex flex-col">
+            <h2 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-900">
               <div className="h-3 w-1 bg-primary" /> Regional Engagement
             </h2>
             <div className="space-y-4 pt-2">
@@ -210,9 +215,9 @@ export default function AnalyticsReport() {
                 const percent = (c.value / max) * 100;
                 return (
                   <div key={c.name} className="space-y-1">
-                    <div className="flex justify-between text-[10px] font-bold text-slate-600">
+                    <div className="flex justify-between text-[10px] font-bold text-slate-900 uppercase tracking-tight">
                       <span>{c.name}</span>
-                      <span>{c.value}</span>
+                      <span className="text-xs">{c.value}</span>
                     </div>
                     <div className="h-1.5 w-full bg-slate-100 rounded-full">
                       <div className="h-full bg-slate-900 rounded-full" style={{ width: `${percent}%` }} />
@@ -225,8 +230,8 @@ export default function AnalyticsReport() {
         </div>
 
         {/* Top Content */}
-        <section className="mb-12 page-break-inside-avoid">
-          <h2 className="mb-6 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
+        <section className="mb-8 page-break-inside-avoid">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
             <div className="h-4 w-1 bg-primary" /> Most Engaging Content
           </h2>
           <table className="w-full text-left">
@@ -240,10 +245,25 @@ export default function AnalyticsReport() {
             <tbody className="divide-y divide-slate-100">
               {(data.topPages || []).map((page) => (
                 <tr key={page.path} className="text-sm">
-                  <td className="py-3 font-medium text-slate-700">{page.path}</td>
-                  <td className="py-3 text-right font-bold">{page.count.toLocaleString()}</td>
+                  <td className="py-3 font-medium text-slate-700">
+                    {page.path === "/" ? "Home Page" : 
+                     page.path === "/#about" ? "Home: About Section" :
+                     page.path === "/#services" ? "Home: Services Section" :
+                     page.path === "/#projects" ? "Home: Projects Section" :
+                     page.path === "/#testimonials" ? "Home: Testimonials" :
+                     page.path === "/#contact" ? "Home: Contact Section" :
+                     page.path === "/#estimator" ? "Home: Cost Estimator" :
+                     page.path === "/admin" ? "Admin Dashboard" : 
+                     page.path === "/admin/login" ? "Admin Login" : 
+                     page.path === "/admin/report" ? "Analytics Report" :
+                     page.path === "/privacy-policy" ? "Privacy Policy" :
+                     page.path === "/terms-of-service" ? "Terms of Service" :
+                     page.path === "/cookie-policy" ? "Cookie Policy" :
+                     page.path.replace(/\//g, " ").replace(/#/g, ": ").trim().split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
+                  </td>
+                  <td className="py-3 text-right font-bold text-slate-900">{page.count.toLocaleString()}</td>
                   <td className="py-3 text-right">
-                    <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold">{(page.count / data.pageViews * 100).toFixed(1)}%</span>
+                    <span className="rounded bg-slate-200 text-slate-900 px-2 py-0.5 text-[10px] font-bold">{(page.count / data.pageViews * 100).toFixed(1)}%</span>
                   </td>
                 </tr>
               ))}
@@ -252,8 +272,8 @@ export default function AnalyticsReport() {
         </section>
 
         {/* Inquiries */}
-        <section className="mb-12 page-break-inside-avoid">
-          <h2 className="mb-6 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
+        <section className="mb-8 page-break-inside-avoid">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-slate-900">
             <div className="h-4 w-1 bg-primary" /> Recent Inquiries & Leads
           </h2>
           <table className="w-full text-left">
@@ -269,13 +289,13 @@ export default function AnalyticsReport() {
               {(data.latestInquiries || []).map((inq) => (
                 <tr key={inq._id} className="text-xs">
                   <td className="py-3 font-bold text-slate-900">{inq.name}</td>
-                  <td className="py-3 text-slate-500">{inq.email}</td>
+                  <td className="py-3 text-slate-700 font-medium">{inq.email}</td>
                   <td className="py-3">
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter">
+                    <span className="rounded-full bg-slate-200 text-slate-900 px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter">
                       {inq.status}
                     </span>
                   </td>
-                  <td className="py-3 text-right font-medium">{new Date(inq.createdAt).toLocaleDateString()}</td>
+                  <td className="py-3 text-right font-bold text-slate-900">{new Date(inq.createdAt).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -319,6 +339,9 @@ export default function AnalyticsReport() {
           }
           h1, h2, h3, p, span, td, th {
             color: black !important;
+          }
+          .text-primary {
+            color: #10b981 !important;
           }
           .recharts-responsive-container {
             width: 100% !important;

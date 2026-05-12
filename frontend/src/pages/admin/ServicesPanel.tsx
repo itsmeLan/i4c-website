@@ -278,7 +278,7 @@ export default function ServicesPanel({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Video URL (YouTube/Vimeo)</label>
+              <label className="text-sm font-medium">Video URL (YouTube)</label>
               <Input
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
