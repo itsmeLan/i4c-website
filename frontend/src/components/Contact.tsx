@@ -12,7 +12,7 @@ import OfficeMap from "@/components/OfficeMap";
 const Contact = () => {
   const { data: settings } = useQuery({
     queryKey: ["settings"],
-    queryFn: () => apiFetch<{ok: true, data: any}>("/api/settings").then(res => res.data),
+    queryFn: () => apiFetch<{ ok: true, data: any }>("/api/settings").then(res => res.data),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -100,7 +100,7 @@ const Contact = () => {
       apiFetch("/api/analytics/event", {
         method: "POST",
         body: JSON.stringify({ event: "quote_submitted", path: window.location.pathname }),
-      }).catch(() => {});
+      }).catch(() => { });
 
       // Reset form
       setFormData({
@@ -132,7 +132,7 @@ const Contact = () => {
             Start Your <span className="gradient-text">Construction Project</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Ready to build your vision? Contact our expert team for a free consultation 
+            Ready to build your vision? Contact our expert team for a free consultation
             and discover how we can bring your construction dreams to life.
           </p>
         </div>
@@ -156,9 +156,9 @@ const Contact = () => {
                             const isEmail = info.title === "Email Address";
                             if (isPhone) {
                               return (
-                                <a 
-                                  key={idx} 
-                                  href={`tel:${detail.replace(/\s+/g, '')}`} 
+                                <a
+                                  key={idx}
+                                  href={`tel:${detail.replace(/\s+/g, '')}`}
                                   className="block text-muted-foreground text-sm hover:text-primary transition-colors"
                                 >
                                   {detail}
@@ -167,8 +167,8 @@ const Contact = () => {
                             }
                             if (isEmail) {
                               return (
-                                <a 
-                                  key={idx} 
+                                <a
+                                  key={idx}
                                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${detail}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
@@ -196,7 +196,7 @@ const Contact = () => {
                 <h3 className="font-semibold mb-4 text-primary">Why Choose i4C?</h3>
                 <div className="space-y-3">
                   {[
-                    "15+ years of construction excellence",
+                    "10+ years of construction excellence",
                     "Licensed and certified professionals",
                     "On-time project delivery guarantee",
                     "Comprehensive warranty coverage",
@@ -364,7 +364,7 @@ const Contact = () => {
                   </div>
 
                   <p className="text-xs text-muted-foreground text-center">
-                    By submitting this form, you agree to our privacy policy and terms of service. 
+                    By submitting this form, you agree to our privacy policy and terms of service.
                     We'll respond to your inquiry within 24 hours.
                   </p>
                 </form>

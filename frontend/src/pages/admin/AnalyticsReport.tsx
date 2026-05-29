@@ -80,14 +80,16 @@ export default function AnalyticsReport() {
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 lg:p-12 print:bg-white print:p-0">
       {/* ── UI Controls (Hidden on Print) ── */}
       <div className="mx-auto mb-8 flex max-w-[210mm] items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm print:hidden">
-        <Button variant="ghost" onClick={() => navigate("/admin")} className="gap-2">
+        <Button 
+          onClick={() => navigate("/admin")} 
+          className="gap-2 bg-primary text-white hover:bg-primary/90 shadow-md transition-all active:scale-95"
+        >
           <ArrowLeft className="h-4 w-4" /> Back to Dashboard
         </Button>
         <div className="flex gap-3">
           <Button 
-            variant="outline" 
             onClick={handlePrint} 
-            className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="gap-2 bg-slate-900 text-white hover:bg-slate-800 shadow-md transition-all active:scale-95"
           >
             <Printer className="h-4 w-4" /> Print Document
           </Button>
