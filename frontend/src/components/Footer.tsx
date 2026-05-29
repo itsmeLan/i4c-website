@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Youtube, Tiktok } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
@@ -58,7 +58,7 @@ const Footer = () => {
                 {[
                   { icon: Facebook, href: "#", label: "Facebook" },
                   { icon: Instagram, href: "#", label: "Instagram" },
-
+                  { icon: Tiktok, href: "#", label: "Tiktok" },
                 ].map((social, index) => (
                   <a
                     key={index}
