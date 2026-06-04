@@ -11,9 +11,43 @@ import { env } from "../utils/env.js";
 
 export const uploadRouter = express.Router();
 
+// Allowed image MIME types.
+const ALLOWED_MIMETYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+
+/**
+ * Validates the first bytes of the file buffer against known image magic bytes.
+ * This prevents MIME-type spoofing — attackers uploading a .php/.js disguised
+ * as an image by only changing the Content-Type header.
+ * @param {Buffer} buffer
+ * @returns {boolean}
+ */
+function isImageByMagicBytes(buffer) {
+  if (!buffer || buffer.length < 4) return false;
+  // JPEG: FF D8 FF
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return true;
+  // PNG: 89 50 4E 47
+  if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) return true;
+  // GIF: 47 49 46 38
+  if (buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x38) return true;
+  // WEBP: starts with RIFF (52 49 46 46) and has WEBP at bytes 8-11
+  if (
+    buffer[0] === 0x52 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x46 &&
+    buffer.length >= 12 &&
+    buffer[8] === 0x57 && buffer[9] === 0x45 && buffer[10] === 0x42 && buffer[11] === 0x50
+  ) return true;
+  return false;
+}
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter(_req, file, cb) {
+    // First gate: check declared MIME type against the allowlist.
+    if (!ALLOWED_MIMETYPES.has(file.mimetype)) {
+      return cb(Object.assign(new Error("Only JPEG, PNG, WEBP, and GIF images are allowed."), { statusCode: 415 }));
+    }
+    cb(null, true);
+  },
 });
 
 function uploadBufferToCloudinary(buffer, options) {
@@ -44,7 +78,16 @@ uploadRouter.post("/image", requireAdmin, upload.single("file"), async (req, res
       throw e;
     }
 
+    // Second gate: verify magic bytes regardless of the declared Content-Type.
+    // This catches MIME-spoofing attacks where the header is faked to bypass fileFilter.
+    if (!isImageByMagicBytes(req.file.buffer)) {
+      const e = new Error("Uploaded file does not appear to be a valid image.");
+      e.statusCode = 415;
+      throw e;
+    }
+
     // Primary: Cloudinary
+
     if (isCloudinaryConfigured()) {
       const result = await uploadBufferToCloudinary(req.file.buffer, {
         folder: "i4c/projects",

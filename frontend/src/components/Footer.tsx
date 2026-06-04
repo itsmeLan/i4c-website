@@ -1,7 +1,21 @@
-import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Youtube, Tiktok } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
+
+const Tiktok = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 const Footer = () => {
   const { data: settings } = useQuery({
@@ -117,7 +131,7 @@ const Footer = () => {
                 </div>
               </div>
 
-              <a 
+              <a
                 href={`tel:${(settings?.phone || "+639123456789").replace(/\D/g, '')}`}
                 className="flex items-center space-x-3 group"
               >
@@ -127,7 +141,7 @@ const Footer = () => {
                 </div>
               </a>
 
-              <a 
+              <a
                 href={`https://mail.google.com/mail/?view=cm&fs=1&to=${settings?.email || "info@i4cconstruction.ph"}`}
                 target="_blank"
                 rel="noopener noreferrer"
