@@ -109,6 +109,12 @@
     font-family: 'Poppins', sans-serif;
   }
 
+  /* Hide default browser password reveal eye icon */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
+
   /* Smooth scroll behavior */
   html {
     scroll-behavior: smooth;
