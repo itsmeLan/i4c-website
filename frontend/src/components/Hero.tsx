@@ -24,9 +24,9 @@ const Hero = () => {
       <div className="absolute inset-0 z-0 overflow-hidden bg-background">
         {/* The beautiful branded hero image positioned in the background */}
         <div className="absolute inset-y-0 right-0 w-full lg:w-[55vw] z-0 opacity-40 lg:opacity-95 animate-fade-in select-none pointer-events-none">
-          <img 
-            src="/hero-sketch.png" 
-            alt="i4C Construction - We Build Your Dream" 
+          <img
+            src="/hero-sketch.png"
+            alt="i4C Construction - We Build Your Dream"
             className="w-full h-full object-cover lg:object-contain object-center lg:object-right"
           />
           {/* Subtle gradient edges to blend the image into the website's theme colors */}
@@ -58,13 +58,13 @@ const Hero = () => {
                 <Award className="h-4 w-4 text-primary" />
                 <span className="text-primary font-medium">Certified Excellence in Construction</span>
               </div>
-              
+
               <h1 className="text-5xl lg:text-7xl font-bold leading-tight landscape:text-3xl md:landscape:text-5xl lg:landscape:text-7xl">
                 Building
                 <span className="block gradient-text text-glow">Tomorrow's</span>
                 Philippines
               </h1>
-              
+
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed landscape:text-lg md:landscape:text-xl">
                 Reliable construction solutions designed for growth, durability, and the future.
               </p>
@@ -72,16 +72,16 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
+              <Button
                 className="btn-primary group"
                 onClick={() => scrollToSection("#projects")}
               >
                 View Our Projects
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              
-              <Button 
-                variant="outline" 
+
+              <Button
+                variant="outline"
                 className="btn-secondary group"
                 onClick={() => scrollToSection("#about")}
               >
