@@ -12,6 +12,7 @@ const serviceUpsertSchema = z.object({
   features: z.array(z.string().min(1).max(200)).optional().default([]),
   icon: z.string().max(120).optional().default(""),
   order: z.number().int().optional().default(0),
+  videoUrl: z.string().max(500).optional().or(z.literal("")).default(""),
 });
 
 // Public: list services

@@ -10,6 +10,7 @@ type ProjectItem = {
   description: string;
   image: string;
   status: string;
+  videoUrl?: string;
 };
 
 type Props = {
@@ -26,6 +27,23 @@ export default function ProjectDetailDialog({ project, open, onClose }: Props) {
       ? "bg-green-500/20 text-green-400 border-green-500/30"
       : "bg-primary/20 text-primary border-primary/30";
 
+  const getEmbedUrl = (url?: string) => {
+    if (!url) return null;
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : null;
+    }
+    if (url.includes("vimeo.com")) {
+      const regExp = /vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
+      const match = url.match(regExp);
+      return match ? `https://player.vimeo.com/video/${match[3]}` : null;
+    }
+    return null;
+  };
+
+  const embedUrl = getEmbedUrl(project.videoUrl);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -35,7 +53,7 @@ export default function ProjectDetailDialog({ project, open, onClose }: Props) {
       />
 
       {/* Dialog */}
-      <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-3xl border border-border bg-card shadow-2xl animate-in zoom-in-95 fade-in duration-300">
+      <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-border bg-card shadow-2xl animate-in zoom-in-95 fade-in duration-300 custom-scrollbar">
         {/* Cover Image */}
         <div className="relative h-56 sm:h-72 overflow-hidden">
           {project.image ? (
@@ -118,6 +136,23 @@ export default function ProjectDetailDialog({ project, open, onClose }: Props) {
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {project.description}
               </p>
+            </div>
+          )}
+
+          {/* Video Player */}
+          {embedUrl && (
+            <div className="mt-6">
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">
+                Promotional Video
+              </h3>
+              <div className="aspect-video overflow-hidden rounded-xl border border-border bg-black">
+                <iframe
+                  src={embedUrl}
+                  className="h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
           )}
 

@@ -5,6 +5,7 @@ type ServiceItem = {
   title: string;
   description: string;
   features: string[];
+  videoUrl?: string;
 };
 
 type Props = {
@@ -18,6 +19,23 @@ export default function ServiceDetailDialog({ service, open, onClose }: Props) {
 
   const Icon = service.icon;
 
+  const getEmbedUrl = (url?: string) => {
+    if (!url) return null;
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : null;
+    }
+    if (url.includes("vimeo.com")) {
+      const regExp = /vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
+      const match = url.match(regExp);
+      return match ? `https://player.vimeo.com/video/${match[3]}` : null;
+    }
+    return null;
+  };
+
+  const embedUrl = getEmbedUrl(service.videoUrl);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -27,7 +45,7 @@ export default function ServiceDetailDialog({ service, open, onClose }: Props) {
       />
 
       {/* Dialog */}
-      <div className="relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-2xl animate-in zoom-in-95 fade-in duration-300">
+      <div className="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl border border-border bg-card shadow-2xl animate-in zoom-in-95 fade-in duration-300 custom-scrollbar">
         {/* Header gradient strip */}
         <div className="relative h-32 bg-gradient-to-br from-primary/30 via-primary/10 to-transparent">
           <div className="absolute -bottom-8 left-6">
@@ -66,6 +84,23 @@ export default function ServiceDetailDialog({ service, open, onClose }: Props) {
                   </li>
                 ))}
               </ul>
+            </div>
+          )}
+
+          {/* Video Player */}
+          {embedUrl && (
+            <div className="mt-6">
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">
+                Service Showcase
+              </h3>
+              <div className="aspect-video overflow-hidden rounded-xl border border-border bg-black">
+                <iframe
+                  src={embedUrl}
+                  className="h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
           )}
 

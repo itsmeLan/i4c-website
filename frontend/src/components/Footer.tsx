@@ -3,6 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
 
+const Tiktok = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
+
 const Footer = () => {
   const { data: settings } = useQuery({
     queryKey: ["settings"],
@@ -58,7 +72,7 @@ const Footer = () => {
                 {[
                   { icon: Facebook, href: "#", label: "Facebook" },
                   { icon: Instagram, href: "#", label: "Instagram" },
-
+                  { icon: Tiktok, href: "#", label: "Tiktok" },
                 ].map((social, index) => (
                   <a
                     key={index}
@@ -117,7 +131,7 @@ const Footer = () => {
                 </div>
               </div>
 
-              <a 
+              <a
                 href={`tel:${(settings?.phone || "+639123456789").replace(/\D/g, '')}`}
                 className="flex items-center space-x-3 group"
               >
@@ -127,12 +141,17 @@ const Footer = () => {
                 </div>
               </a>
 
-              <div className="flex items-start space-x-3">
-                <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                <div className="text-muted-foreground">
+              <a
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${settings?.email || "info@i4cconstruction.ph"}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start space-x-3 group"
+              >
+                <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <div className="text-muted-foreground group-hover:text-primary transition-colors">
                   <p>{settings?.email || "info@i4cconstruction.ph"}</p>
                 </div>
-              </div>
+              </a>
             </div>
 
             {/* Business Hours */}

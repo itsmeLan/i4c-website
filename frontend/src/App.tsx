@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AnalyticsReport from "./pages/admin/AnalyticsReport";
 import { RequireAdmin } from "./pages/admin/RequireAdmin";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -20,7 +21,7 @@ function AnalyticsTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    const path = `${location.pathname}${location.search}`;
+    const path = `${location.pathname}${location.hash}`;
 
     if (typeof window !== "undefined" && (window as any).gtag) {
       (window as any).gtag("event", "page_view", { page_path: path });
@@ -55,7 +56,8 @@ function AnalyticsTracker() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.hash]);
+
 
   return null;
 }
@@ -75,6 +77,14 @@ const App = () => (
             element={
               <RequireAdmin>
                 <AdminDashboard />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/report"
+            element={
+              <RequireAdmin>
+                <AnalyticsReport />
               </RequireAdmin>
             }
           />

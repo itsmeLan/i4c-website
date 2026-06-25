@@ -31,6 +31,7 @@ type Project = {
   description?: string;
   status?: "Completed" | "In Progress";
   coverImageUrl?: string;
+  videoUrl?: string;
   images?: { url: string; publicId: string }[];
 };
 
@@ -60,6 +61,7 @@ export default function ProjectsPanel({
   const [location, setLocation] = useState("");
   const [year, setYear] = useState("");
   const [client, setClient] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
 
   function resetForm() {
     setTitle("");
@@ -69,6 +71,7 @@ export default function ProjectsPanel({
     setLocation("");
     setYear("");
     setClient("");
+    setVideoUrl("");
     setEditingId(null);
     setImageMode("url");
   }
@@ -88,6 +91,7 @@ export default function ProjectsPanel({
     setLocation(p.location || "");
     setYear(p.year || "");
     setClient(p.client || "");
+    setVideoUrl(p.videoUrl || "");
     setSheetOpen(true);
   }
 
@@ -100,6 +104,7 @@ export default function ProjectsPanel({
       location,
       year,
       client,
+      videoUrl,
       images: [] as { url: string; publicId: string }[],
     };
     try {
@@ -439,6 +444,19 @@ export default function ProjectsPanel({
                   </button>
                 </div>
               )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Video URL (YouTube)</label>
+              <Input
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                className="bg-background/50"
+              />
+              <p className="text-[10px] text-muted-foreground">
+                Paste a link to a promotional video.
+              </p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Description</label>

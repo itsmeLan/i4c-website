@@ -15,6 +15,7 @@ type ProjectItem = {
   description: string;
   image: string;
   status: string;
+  videoUrl?: string;
 };
 
 const Projects = () => {
@@ -28,6 +29,17 @@ const Projects = () => {
     { id: "infrastructure", label: "Infrastructure" },
     { id: "industrial", label: "Industrial" }
   ];
+
+  const trackProjectView = (project: ProjectItem) => {
+    apiFetch("/api/analytics/event", {
+      method: "POST",
+      body: JSON.stringify({
+        event: "project_view",
+        path: `/projects/${project.id}`,
+        meta: { title: project.title, category: project.category }
+      }),
+    }).catch(() => {});
+  };
 
   const fallbackProjects: ProjectItem[] = [
     {
@@ -116,6 +128,7 @@ const Projects = () => {
       description: p.description || "",
       image: p.coverImageUrl || p.images?.[0]?.url || "",
       status: p.status || "Completed",
+      videoUrl: p.videoUrl || "",
     }));
   }, [apiData]);
 
@@ -159,6 +172,7 @@ const Projects = () => {
           {displayedProjects.map((project, index) => (
             <div 
               key={project.id}
+              id={`project-card-${index}`}
               className="card-construction group overflow-hidden animate-slide-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
@@ -186,7 +200,10 @@ const Projects = () => {
                   <Button
                     size="sm"
                     className="btn-primary"
-                    onClick={() => setSelectedProject(project)}
+                    onClick={() => {
+                      setSelectedProject(project);
+                      trackProjectView(project);
+                    }}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
                     View Details

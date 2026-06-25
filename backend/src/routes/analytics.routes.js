@@ -88,7 +88,11 @@ analyticsRouter.get("/dashboard", requireAdmin, async (req, res, next) => {
       { $sort: { count: -1 } },
       { $limit: 6 }
     ]);
-    const formatTimezone = (tz) => tz ? tz.split("/").pop().replace(/_/g, " ") : "Unknown";
+    const formatTimezone = (tz) => {
+      if (!tz) return "Unknown";
+      if (tz === "Asia/Manila") return "Philippines";
+      return tz.split("/").pop().replace(/_/g, " ");
+    };
     const countryData = countryAgg.map(c => ({
       name: formatTimezone(c._id),
       value: c.count
@@ -124,6 +128,30 @@ analyticsRouter.get("/dashboard", requireAdmin, async (req, res, next) => {
       };
     });
 
+    // ── 5. Top Pages Pipeline ──
+    const pageAgg = await AnalyticsEvent.aggregate([
+      { $match: { event: "page_view", createdAt: { $gte: targetDate } } },
+      { 
+        $project: { 
+          path: { $arrayElemAt: [{ $split: ["$path", "?"] }, 0] } 
+        } 
+      },
+      { $group: { _id: "$path", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 8 }
+    ]);
+    const topPages = pageAgg.map(p => ({
+      path: p._id || "/",
+      count: p.count
+    }));
+
+    // ── 6. Engagement (Scroll Depth) Pipeline ──
+    const scrollAgg = await AnalyticsEvent.aggregate([
+      { $match: { event: "scroll_depth", createdAt: { $gte: targetDate } } },
+      { $group: { _id: null, avgScroll: { $avg: "$meta.percent" } } }
+    ]);
+    const avgScrollDepth = scrollAgg.length > 0 ? Math.round(scrollAgg[0].avgScroll) : 0;
+
     const rawConversion = pageViews > 0 ? (recentInquiriesCount / pageViews) * 100 : 0;
     const conversionRate = Math.min(rawConversion, 100).toFixed(1);
 
@@ -138,7 +166,9 @@ analyticsRouter.get("/dashboard", requireAdmin, async (req, res, next) => {
         areaData,
         sourceData,
         countryData,
-        activityHeatmap
+        activityHeatmap,
+        topPages,
+        avgScrollDepth
       }
     });
   } catch (err) {

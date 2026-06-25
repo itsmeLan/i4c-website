@@ -109,6 +109,12 @@
     font-family: 'Poppins', sans-serif;
   }
 
+  /* Hide default browser password reveal eye icon */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
+
   /* Smooth scroll behavior */
   html {
     scroll-behavior: smooth;
@@ -163,6 +169,12 @@
     box-shadow: var(--shadow-glow);
   }
 
+  .nav-highlight {
+    @apply ring-4 ring-primary scale-105 z-10 !important;
+    box-shadow: var(--shadow-glow) !important;
+    transition: all 0.3s ease-in-out;
+  }
+
   .section-padding {
     @apply px-4 py-20 sm:px-6 lg:px-8;
   }
@@ -215,6 +227,29 @@
     to {
       opacity: 1;
     }
+  }
+
+  @keyframes neon-move {
+    0% { transform: translate(-20%, -20%) scale(1); opacity: 0.4; }
+    33% { transform: translate(20%, 10%) scale(1.5); opacity: 0.8; }
+    66% { transform: translate(-10%, 30%) scale(1.2); opacity: 0.6; }
+    100% { transform: translate(-20%, -20%) scale(1); opacity: 0.4; }
+  }
+
+  @keyframes draw-line {
+    0% { stroke-dashoffset: 1000; opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
+  }
+
+  .animate-neon-move {
+    animation: neon-move 15s ease-in-out infinite;
+  }
+
+  .animate-draw-line {
+    stroke-dasharray: 1000;
+    animation: draw-line 8s ease-in-out infinite;
   }
 
   /* Intersection Observer Animation Classes */

@@ -28,6 +28,7 @@ type Service = {
   features?: string[];
   icon?: string;
   order?: number;
+  videoUrl?: string;
 };
 
 export default function ServicesPanel({
@@ -51,12 +52,14 @@ export default function ServicesPanel({
   const [description, setDescription] = useState("");
   const [features, setFeatures] = useState("");
   const [order, setOrder] = useState(0);
+  const [videoUrl, setVideoUrl] = useState("");
 
   function resetForm() {
     setTitle("");
     setDescription("");
     setFeatures("");
     setOrder(0);
+    setVideoUrl("");
     setEditingId(null);
   }
 
@@ -71,6 +74,7 @@ export default function ServicesPanel({
     setDescription(s.description || "");
     setFeatures((s.features || []).join("\n"));
     setOrder(s.order || 0);
+    setVideoUrl(s.videoUrl || "");
     setSheetOpen(true);
   }
 
@@ -83,6 +87,7 @@ export default function ServicesPanel({
         .map((s) => s.trim())
         .filter(Boolean),
       order,
+      videoUrl,
     };
     try {
       if (editingId) {
@@ -270,6 +275,19 @@ export default function ServicesPanel({
                 className="bg-background/50"
                 rows={6}
               />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Video URL (YouTube)</label>
+              <Input
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                className="bg-background/50"
+              />
+              <p className="text-[10px] text-muted-foreground">
+                Paste a link to a promotional video for this service.
+              </p>
             </div>
             <div className="flex gap-3 pt-4">
               <Button

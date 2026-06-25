@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
+import VideoModal from "./VideoModal";
 
 const Testimonials = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
   const fallbackTestimonials = [
     {
@@ -77,6 +79,7 @@ const Testimonials = () => {
       content: t.content,
       image: t.imageUrl || "https://images.unsplash.com/photo-1494790108755-2616b612c9af?auto=format&fit=crop&w=150&q=80",
       project: t.project || "",
+      videoUrl: t.videoUrl || "",
     }));
   }, [apiData]);
 
@@ -152,17 +155,31 @@ const Testimonials = () => {
                         </div>
 
                         {/* Client Info */}
-                        <div className="flex items-center justify-center lg:justify-start gap-4">
-                          <img 
-                            src={testimonial.image} 
-                            alt={testimonial.name}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
-                          />
-                          <div>
-                            <div className="font-semibold text-foreground">{testimonial.name}</div>
-                            <div className="text-sm text-muted-foreground">{testimonial.position}</div>
-                            <div className="text-sm text-primary">{testimonial.company}</div>
+                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 sm:gap-4">
+                          <div className="flex items-center gap-4">
+                            <img 
+                              src={testimonial.image} 
+                              alt={testimonial.name}
+                              className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                            />
+                            <div className="text-left">
+                              <div className="font-semibold text-foreground">{testimonial.name}</div>
+                              <div className="text-sm text-muted-foreground">{testimonial.position}</div>
+                              <div className="text-sm text-primary">{testimonial.company}</div>
+                            </div>
                           </div>
+                          {testimonial.videoUrl && (
+                            <button 
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setActiveVideoUrl(testimonial.videoUrl);
+                              }}
+                              className="flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 text-xs font-bold text-primary transition-all hover:bg-primary/20 hover:scale-105 sm:ml-auto"
+                            >
+                              <Play className="h-3 w-3 fill-current" />
+                              Watch Video
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -171,6 +188,11 @@ const Testimonials = () => {
               ))}
             </div>
           </div>
+
+          <VideoModal 
+            url={activeVideoUrl} 
+            onClose={() => setActiveVideoUrl(null)} 
+          />
 
           {/* Navigation Buttons */}
           <div className="flex justify-center items-center gap-4 mt-8">
